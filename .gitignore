@@ -60,5 +60,5 @@ typings/
 # next.js build output
 .next
 
-# Project-specific files
-127.0.0.1
+# database directories
+database/

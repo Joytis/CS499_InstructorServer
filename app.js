@@ -1,20 +1,30 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const morgan = require('morgan');
+const db = require('./models');
+const { logger } = require('./config');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var todos = require('./routes/todos');
+const index = require('./routes/index');
+const users = require('./routes/users');
+const todos = require('./routes/todos');
 
-var app = express();
+const app = express();
+
+// Attempt to authenticate database before adding routes to app.
+db.sequelize.authenticate()
+  .then(async () => {
+    logger.info('Connection has been established. Attempting sync');
+    await db.sequelize.sync().catch(err => logger.error('Unable to connnect: ', err));
+  })
+  .catch(err => logger.error('Unable to connect to database: ', err));
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+app.use(morgan('combined', { stream: logger.stream }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -25,19 +35,20 @@ app.use('/users', users);
 app.use('/todos', todos);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
+app.use((err, req, res) => {
+  // Change Status
   res.status(err.status || 500);
-  res.render('error');
+
+  // SEnd status back as error.
+  res.json({
+    error: req.app.get('env') === 'development' ? err : {},
+    message: err.message,
+  });
 });
 
 module.exports = app;
