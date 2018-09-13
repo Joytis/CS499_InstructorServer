@@ -6,10 +6,12 @@ const morgan = require('morgan');
 const db = require('./models');
 const { logger } = require('./config');
 
+// Grab all the routes. NOTE: should probably iterate over folder.
 const index = require('./routes/index');
 const users = require('./routes/users');
 const todos = require('./routes/todos');
 
+// Create express application
 const app = express();
 
 // Attempt to authenticate database before adding routes to app.
@@ -30,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Add routes to app.
 app.use('/', index);
 app.use('/users', users);
 app.use('/todos', todos);

@@ -16,7 +16,6 @@ const db = {};
 const sequelize = new Sequelize(sql.database, sql.user, sql.password, sql);
 
 // Tables
-// ./database/igs.db
 fs.readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
   .forEach((file) => {
