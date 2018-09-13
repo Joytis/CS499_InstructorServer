@@ -5,17 +5,12 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     weight: { type: DataTypes.FLOAT, defaultValue: 0.0, validate: { min: 0.0, max: 1.0 } },
     lowestGradesDropped: { type: DataTypes.INTEGER, defaultValue: 0, allowNull: false },
-
-    // Reference data values
-    sectionRef: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'sections',
-        key: 'id',
-      },
-    },
   });
+
+  assignmentCategory.associate = (db) => {
+    assignmentCategory.belongsTo(db.course, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+    assignmentCategory.hasMany(db.assignment);
+  };
 
   return assignmentCategory;
 };

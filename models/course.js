@@ -5,5 +5,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
   });
 
+  course.associate = (db) => {
+    course.hasMany(db.section);
+  };
+
   return course;
 };

@@ -3,8 +3,5 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
   });
-  todo.associate = () => {
-    // associations can be defined here
-  };
   return todo;
 };

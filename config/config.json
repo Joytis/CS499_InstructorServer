@@ -1,7 +1,7 @@
 {
   "development": {
     "sql": {
-      "database": "database_development",
+      "database": "igs_development",
       "user": "root",
       "password": null,
       "dialect": "sqlite",
@@ -13,9 +13,23 @@
       }
     }
   },
+  "test": {
+    "sql": {
+      "database": "igs_test",
+      "user": "root",
+      "password": null,
+      "dialect": "sqlite",
+      "operatorsAliases": false,
+      "host": "./database/test.db",
+      "storage": "./database/test.db",
+      "sync": {
+        "test": true
+      }
+    }
+  },
   "production": {
     "sql": {
-      "database": "database_production",
+      "database": "igs_production",
       "user": "root",
       "password": null,
       "dialect": "sqlite",

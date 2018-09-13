@@ -7,5 +7,9 @@ module.exports = (sequelize, DataTypes) => {
     title: { type: DataTypes.STRING, defaultValue: 'Term: ' },
   });
 
+  term.associate = (db) => {
+    term.hasMany(db.course);
+  };
+
   return term;
 };

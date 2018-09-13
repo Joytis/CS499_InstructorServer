@@ -3,19 +3,14 @@ module.exports = (sequelize, DataTypes) => {
     // Data values
     id: { type: DataTypes.INTEGER, primaryKey: true },
     sectionNumber: { type: DataTypes.INTEGER, allowNull: false },
-
-    // Reference values
-    courseRef: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'courses', key: 'id' },
-    },
-    termRef: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: { model: 'terms', key: 'id' },
-    },
   });
+
+  section.associate = (db) => {
+    section.belongsTo(db.instructor);
+    section.belongsTo(db.course, { foreignKey: { allowNull: false } });
+    section.belongsTo(db.term, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+    section.belongsToMany(db.student, { through: 'StudentSection' });
+  };
 
   return section;
 };

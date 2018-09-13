@@ -1,6 +1,9 @@
 {
+    "plugins": [
+      "mocha"
+    ],
     "extends": "airbnb-base",
     "rules": {
-      "import/no-dynamic-require": 0
+      "mocha/no-exclusive-tests": "error"
     }
 }

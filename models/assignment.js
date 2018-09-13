@@ -3,20 +3,14 @@ module.exports = (sequelize, DataTypes) => {
     // Data values
     id: { type: DataTypes.INTEGER, primaryKey: true },
     name: { type: DataTypes.STRING, notNull: true },
+    totalPoints: { type: DataTypes.INTEGER, defaultValue: 100 },
     dateCreated: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
     dueDate: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-
-    // references
-    assignmentCategoryRef: {
-      type: DataTypes.INTEGER,
-      notNull: true,
-
-      references: {
-        model: 'assignmentCategories',
-        key: 'id',
-      },
-    },
   });
+
+  assignment.associate = (db) => {
+    assignment.belongsTo(db.assignmentCategory, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
+  };
 
   return assignment;
 };
