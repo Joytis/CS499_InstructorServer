@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const assignment = sequelize.define('assignment', {
     // Data values
-    id: { type: DataTypes.INTEGER, primaryKey: true },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, notNull: true },
     totalPoints: { type: DataTypes.INTEGER, defaultValue: 100 },
     dateCreated: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },

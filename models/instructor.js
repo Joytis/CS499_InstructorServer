@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const instructor = sequelize.define('instructor', {
-    id: { type: DataTypes.INTEGER, primaryKey: true },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     username: { type: DataTypes.STRING, allowNull: false },
     password: { type: DataTypes.INTEGER, allowNull: false },
     firstName: { type: DataTypes.STRING, allowNull: false },

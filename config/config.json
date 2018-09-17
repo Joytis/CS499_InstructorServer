@@ -23,7 +23,7 @@
       "host": "./database/test.db",
       "storage": "./database/test.db",
       "sync": {
-        "test": true
+        "force": true
       }
     }
   },

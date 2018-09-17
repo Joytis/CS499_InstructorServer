@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const student = sequelize.define('student', {
-    id: { type: DataTypes.INTEGER, primaryKey: true },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     aNumber: { type: DataTypes.INTEGER, unique: true },
     firstName: { type: DataTypes.STRING, allowNull: false },
     lastName: { type: DataTypes.STRING, allowNull: false },
