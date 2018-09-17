@@ -1,3 +1,4 @@
+// NOTE: THIS IS JUST A TEST REST API! Doesn't even use async await. :c
 const express = require('express');
 const model = require('../models/index');
 
