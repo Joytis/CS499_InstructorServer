@@ -15,6 +15,7 @@ const { logger } = require('./config');
 const index = require('./routes/index');
 const todos = require('./routes/todos');
 const login = require('./routes/login');
+const signup = require('./routes/signup');
 
 const app = express();
 
@@ -83,6 +84,7 @@ app.use((req, res, next) => {
 app.use('/', index);
 app.use('/todos', todos);
 app.use('/login', login);
+app.use('/signup', signup);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
