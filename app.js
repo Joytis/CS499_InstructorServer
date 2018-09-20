@@ -52,8 +52,37 @@ app.use(session({
 }));
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
 
+// This middleare intercepts requests for favicon and tells them to bugger off.
+app.use((req, res, next) => {
+  if (req.originalUrl === '/favicon.ico') {
+    res.status(204).json({ nope: true });
+  }
+  next();
+});
+
+// This middleware will check if user's cookie is still saved in browser and user is not set
+//  then automatically log the user out.
+// This usually happens when you stop your express server after login, your cookie still
+//  remains saved in the browser.
+app.use((req, res, next) => {
+  if (req.cookies.user_sid && !req.session.user) {
+    res.clearCookie('user_sid');
+  }
+  next();
+});
+
+// This session middleware logs the session information. REMOVE FOR PRODUCTION.
+app.use((req, res, next) => {
+  logger.info('req.session', req.session);
+  next();
+});
+
+// Add routes to app.
+app.use('/', index);
+app.use('/todos', todos);
+app.use('/login', login);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -71,35 +100,5 @@ app.use((err, req, res) => {
     message: err.message,
   });
 });
-
-// This middleware will check if user's cookie is still saved in browser and user is not set
-//  then automatically log the user out.
-// This usually happens when you stop your express server after login, your cookie still
-//  remains saved in the browser.
-app.use((req, res, next) => {
-  if (req.cookies.user_sid && !req.session.user) {
-    res.clearCookie('user_sid');
-  }
-  next();
-});
-
-// This middleare intercepts requests for favicon and tells them to bugger off.
-app.use((req, res, next) => {
-  if (req.originalUrl === '/favicon.ico') {
-    res.status(204).json({ nope: true });
-  }
-  next();
-});
-
-// This session middleware logs the session information. REMOVE FOR PRODUCTION.
-app.use((req, res, next) => {
-  logger.info('req.session', req.session);
-  next();
-});
-
-// Add routes to app.
-app.use('/', index);
-app.use('/todos', todos);
-app.use('/login', login);
 
 module.exports = app;
