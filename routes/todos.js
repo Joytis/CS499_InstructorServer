@@ -1,11 +1,12 @@
 // NOTE: THIS IS JUST A TEST REST API! Doesn't even use async await. :c
 const express = require('express');
 const model = require('../models/index');
+const sessionChecker = require('./sessionChecker');
 
 const router = express.Router();
 
 /* GET todo listing. */
-router.get('/', (req, res) => {
+router.get('/', sessionChecker, (req, res) => {
   model.todo.findAll()
     .then(todos => res.json({
       error: false,
@@ -19,7 +20,7 @@ router.get('/', (req, res) => {
 
 
 /* POST todo. */
-router.post('/', (req, res) => {
+router.post('/', sessionChecker, (req, res) => {
   const { title, description } = req.body;
 
   model.todo.create({ title, description })
@@ -36,7 +37,7 @@ router.post('/', (req, res) => {
 
 
 /* update todo. */
-router.put('/:id', (req, res) => {
+router.put('/:id', sessionChecker, (req, res) => {
   // OBject destructing
   const { id } = req.params;
   const { title, description } = req.body;
@@ -54,7 +55,7 @@ router.put('/:id', (req, res) => {
 
 
 /* GET todo listing. */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', sessionChecker, (req, res) => {
   const { id } = req.params;
 
   model.todo.destroy({ where: { id } })
