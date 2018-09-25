@@ -1,3 +1,5 @@
+const db = require('../models');
+
 module.exports = (req, res, next) => {
   if (req.session === undefined) {
     res.status(401).json({

@@ -20,11 +20,12 @@ router.post('/', async (req, res) => {
   const info = req.body;
 
   // Try to find user.
+
   const instructor = await db.instructor.findOne({ where: { username } }).catch(logger.error);
 
   // Check if instructor already exists.
   logger.info(instructor);
-  if (instructor === null) {
+  if (instructor !== null) {
     res.status(409).json({
       error: true,
       message: 'Instructor with given username already exists.',
@@ -42,11 +43,13 @@ router.post('/', async (req, res) => {
   });
 
   // new instructor created successfully
-  res.status(200).json({
-    error: false,
-    message: 'New instructor created',
-    instructor: newInstructor.dataValues,
-  });
+  if (newInstructor !== undefined && newInstructor !== null) {
+    res.status(200).json({
+      error: false,
+      message: 'New instructor created',
+      instructor: newInstructor.dataValues,
+    });
+  }
 });
 
 

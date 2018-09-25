@@ -16,24 +16,25 @@ router.post('/', async (req, res) => {
   // extract useful info.
   const { username, password } = req.body;
   // Try to authenticate information.
-  const user = await db.instructor.findOne({ where: { username } }).catch(logger.error);
-  if (!user) {
-    res.status(404).json({
+  const instructor = await db.instructor.findOne({ where: { username } }).catch(logger.error);
+  logger.info(JSON.stringify(instructor));
+  if (instructor === null) {
+    return res.status(404).json({
       error: true,
       message: 'Instructor does not exist.',
     });
-  } else if (!user.validatePassword(password)) {
-    res.status(409).json({
+  }
+  if (!await db.instructor.validPassword(password, instructor.password)) {
+    return res.status(409).json({
       error: true,
       message: 'Password incorrect',
     });
-  } else {
-    req.session.user = user.dataValues;
-    res.status(200).json({
-      error: false,
-      message: 'Instructor session created',
-    });
   }
+  req.session.instructor = instructor.dataValues;
+  return res.status(200).json({
+    error: false,
+    message: 'Instructor session created',
+  });
 });
 
 module.exports = router;

@@ -27,7 +27,6 @@ db.sequelize.authenticate()
   })
   .catch(err => logger.error('Unable to connect to database: ', err));
 
-// Create express application
 
 // Initialize express to forward to winston with morgan.
 app.use(morgan('combined', { stream: logger.stream }));
@@ -53,7 +52,6 @@ app.use(session({
 }));
 
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 
 // This middleare intercepts requests for favicon and tells them to bugger off.
 app.use((req, res, next) => {
@@ -63,20 +61,27 @@ app.use((req, res, next) => {
   next();
 });
 
+// This session middleware logs the session information. REMOVE FOR PRODUCTION.
+app.use((req, res, next) => {
+  logger.info('req.session', req.session);
+  next();
+});
+
+// This session middleware logs the cookie information. REMOVE FOR PRODUCTION.
+app.use((req, res, next) => {
+  logger.info('req.cookies', req.cookies);
+  next();
+});
+
 // This middleware will check if user's cookie is still saved in browser and user is not set
 //  then automatically log the user out.
 // This usually happens when you stop your express server after login, your cookie still
 //  remains saved in the browser.
 app.use((req, res, next) => {
   if (req.cookies.user_sid && !req.session.user) {
+    logger.info('commanding to clear cookie');
     res.clearCookie('user_sid');
   }
-  next();
-});
-
-// This session middleware logs the session information. REMOVE FOR PRODUCTION.
-app.use((req, res, next) => {
-  logger.info('req.session', req.session);
   next();
 });
 
@@ -91,16 +96,22 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error handler
-app.use((err, req, res) => {
-  // Change Status
-  res.status(err.status || 500);
-
-  // SEnd status back as error.
-  res.json({
-    error: req.app.get('env') === 'development' ? err : {},
-    message: err.message,
-  });
+// This middleware should handle syntax parsing errors.
+app.use((error, req, res, next) => {
+  if (error instanceof SyntaxError) {
+    res.status(400).json({
+      error: true,
+      message: 'Malformed request. Can not process',
+    });
+  } else {
+    next();
+  }
 });
+
+// error handler
+app.use((err, req, res) => res.status(err.status || 500).json({
+  error: req.app.get('env') === 'development' ? err : {},
+  message: err.message,
+}));
 
 module.exports = app;
