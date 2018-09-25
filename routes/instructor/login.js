@@ -15,7 +15,6 @@ router.post('/', async (req, res, next) => {
   const { username, password } = req.body;
   // Try to authenticate information.
   const instructor = await db.instructor.findOne({ where: { username } }).catch(logger.error);
-  logger.info(JSON.stringify(instructor));
   if (instructor === null) {
     return next(createError(404, 'instructor not found'));
   }

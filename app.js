@@ -76,10 +76,10 @@ app.use((error, req, res, next) => {
   next();
 });
 
-// error handler
-app.use((err, req, res) => res.status(err.status || 500).json({
-  error: req.app.get('env') === 'development' ? err : {},
-  message: err.message,
-}));
+// // error handler
+// app.use((err, req, res) => res.status(err.status || 500).json({
+//   error: req.app.get('env') === 'development' ? err : {},
+//   message: err.message,
+// }));
 
 module.exports = app;
