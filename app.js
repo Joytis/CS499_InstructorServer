@@ -9,14 +9,6 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models');
 const { logger } = require('./config');
 
-// Initialize sequelize with session store
-
-// Grab all the routes. NOTE: should probably iterate over folder.
-const index = require('./routes/index');
-const todos = require('./routes/todos');
-const login = require('./routes/login');
-const signup = require('./routes/signup');
-
 const app = express();
 
 // Attempt to authenticate database before adding routes to app.
@@ -39,7 +31,7 @@ app.use(cookieParser());
 
 // initialize express-session to allow us track the logged-in user across sessions.
 app.use(session({
-  key: 'user_sid',
+  key: 'instructor_sid',
   secret: 'CHANGEME',
   resave: false,
   saveUninitialized: false,
@@ -61,35 +53,20 @@ app.use((req, res, next) => {
   next();
 });
 
-// This session middleware logs the session information. REMOVE FOR PRODUCTION.
+// Checks if cookie is still active but the database session isn't.
 app.use((req, res, next) => {
-  logger.info('req.session', req.session);
-  next();
-});
-
-// This session middleware logs the cookie information. REMOVE FOR PRODUCTION.
-app.use((req, res, next) => {
-  logger.info('req.cookies', req.cookies);
-  next();
-});
-
-// This middleware will check if user's cookie is still saved in browser and user is not set
-//  then automatically log the user out.
-// This usually happens when you stop your express server after login, your cookie still
-//  remains saved in the browser.
-app.use((req, res, next) => {
-  if (req.cookies.user_sid && !req.session.user) {
-    logger.info('commanding to clear cookie');
-    res.clearCookie('user_sid');
+  if (req.cookies.instructor_sid && !req.session.instructor) {
+    res.clearCookie('instructor_sid');
   }
   next();
 });
 
 // Add routes to app.
-app.use('/', index);
-app.use('/todos', todos);
-app.use('/login', login);
-app.use('/signup', signup);
+app.use('/', require('./routes/index'));
+app.use('/todos', require('./routes/todos'));
+app.use('/login', require('./routes/login'));
+app.use('/logout', require('./routes/logout'));
+app.use('/signup', require('./routes/signup'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

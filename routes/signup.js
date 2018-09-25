@@ -11,7 +11,7 @@ router.get('/', sessionChecker, async (req, res) => {
   res.status(200).json({
     error: false,
     message: 'Instructor information found',
-    instructor: req.session.user,
+    instructor: req.session.instructor,
   });
 });
 

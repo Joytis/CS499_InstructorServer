@@ -6,10 +6,7 @@ const sessionChecker = require('./sessionChecker');
 const router = express.Router();
 
 /* GET if session is active. */
-router.get('/', sessionChecker, (req, res) => {
-  // If user has passed session information, return OK.
-  res.status(200);
-});
+router.get('/', sessionChecker, (req, res) => res.status(200).json({ }));
 
 /* POST create a new user session. */
 router.post('/', async (req, res) => {
