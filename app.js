@@ -63,10 +63,7 @@ app.use((req, res, next) => {
 
 // Add routes to app.
 app.use('/', require('./routes/index'));
-app.use('/todos', require('./routes/todos'));
-app.use('/login', require('./routes/login'));
-app.use('/logout', require('./routes/logout'));
-app.use('/signup', require('./routes/signup'));
+app.use('/instructor', require('./routes/instructor'));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -75,14 +72,8 @@ app.use((req, res, next) => {
 
 // This middleware should handle syntax parsing errors.
 app.use((error, req, res, next) => {
-  if (error instanceof SyntaxError) {
-    res.status(400).json({
-      error: true,
-      message: 'Malformed request. Can not process',
-    });
-  } else {
-    next();
-  }
+  if (error instanceof SyntaxError) next(createError(400));
+  next();
 });
 
 // error handler

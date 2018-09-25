@@ -1,7 +1,8 @@
+const createError = require('http-errors');
 const express = require('express');
-const db = require('../models');
-const sessionChecker = require('./sessionChecker');
-const { logger } = require('../config');
+const db = require('../../models');
+const sessionChecker = require('../sessionChecker');
+const { logger } = require('../../config');
 
 const router = express.Router();
 
@@ -15,7 +16,7 @@ router.get('/', sessionChecker, async (req, res) => {
   });
 });
 
-router.post('/', async (req, res) => {
+router.post('/', async (req, res, next) => {
   const { username } = req.body;
   const info = req.body;
 
@@ -26,20 +27,14 @@ router.post('/', async (req, res) => {
   // Check if instructor already exists.
   logger.info(instructor);
   if (instructor !== null) {
-    res.status(409).json({
-      error: true,
-      message: 'Instructor with given username already exists.',
-    });
+    next(createError(409));
     return;
   }
 
   // Since they do not, create once.
   const newInstructor = await db.instructor.create(info).catch((error) => {
     logger.error(error);
-    res.status(400).json({
-      error: true,
-      message: 'Could not create user with given credentials',
-    });
+    next(createError(400));
   });
 
   // new instructor created successfully
