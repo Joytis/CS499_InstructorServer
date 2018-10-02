@@ -1,4 +1,3 @@
-const createError = require('http-errors');
 const express = require('express');
 // const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -65,21 +64,20 @@ app.use((req, res, next) => {
 app.use('/', require('./routes/index'));
 app.use('/instructor', require('./routes/instructor'));
 
-// catch 404 and forward to error handler
-app.use((req, res, next) => {
-  next(createError(404));
-});
+// Error handling middleware.
+app.use((err, req, res) => {
+  // We log the error internaly
+  logger.error(err);
 
-// This middleware should handle syntax parsing errors.
-app.use((error, req, res, next) => {
-  if (error instanceof SyntaxError) next(createError(400));
-  next();
-});
+  // Remove Error's `stack` property. We don't want
+  // users to see this at the production env
+  if (process.env.NODE_ENV !== 'development') {
+    // Deliberately ignoring pure progrmaming here. We're the last middleware in the chain.
+    delete err.stack;
+  }
 
-// // error handler
-// app.use((err, req, res) => res.status(err.status || 500).json({
-//   error: req.app.get('env') === 'development' ? err : {},
-//   message: err.message,
-// }));
+  // Finaly respond to the request */
+  res.status(err.statusCode || 500).json(err);
+});
 
 module.exports = app;

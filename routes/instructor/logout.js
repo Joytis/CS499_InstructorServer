@@ -1,6 +1,6 @@
-const createError = require('http-errors');
 const express = require('express');
 const sessionChecker = require('../sessionChecker');
+const { ErrUnknown } = require('../errors');
 
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post('/', sessionChecker, (req, res, next) => {
     });
   }
 
-  return next(createError(500));
+  return next(new ErrUnknown());
 });
 
 module.exports = router;
