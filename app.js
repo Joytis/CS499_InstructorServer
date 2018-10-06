@@ -63,6 +63,7 @@ app.use((req, res, next) => {
 // Add routes to app.
 app.use('/', require('./routes/index'));
 app.use('/instructor', require('./routes/instructor'));
+app.use('/term', require('./routes/terms'));
 
 // Error handling middleware.
 app.use((err, req, res) => {

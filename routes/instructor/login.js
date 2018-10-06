@@ -11,19 +11,20 @@ router.get('/', sessionChecker, (req, res) => res.status(200).json({}));
 
 /* POST create a new user session. */
 router.post('/', async (req, res, next) => {
+  // NOTE: give correct error on incorrect login
   // extract useful info.
   const { username, password } = req.body;
   // Try to authenticate information.
   const instructor = await db.instructor.findOne({ where: { username } }).catch(logger.warn);
 
-  if (instructor === null) next(new NotFound());
+  if (instructor === null) return next(new NotFound());
 
   if (!await db.instructor.validPassword(password, instructor.password)) {
-    next(new Conflict());
+    return next(new Conflict());
   }
 
   req.session.instructor = instructor.dataValues;
-  res.status(200).json({
+  return res.status(200).json({
     message: 'Instructor session created',
   });
 });
