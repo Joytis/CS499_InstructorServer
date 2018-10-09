@@ -63,19 +63,20 @@ app.use((req, res, next) => {
 // Add routes to app.
 app.use('/', require('./routes/index'));
 app.use('/instructor', require('./routes/instructor'));
-app.use('/term', require('./routes/terms'));
+app.use('/terms', require('./routes/terms'));
 
 // Error handling middleware.
-app.use((err, req, res) => {
-  // We log the error internaly
+// NOTE: we NEED next for this error handler.
+app.use((err, req, res, next) => { // eslint-disable-line
   logger.error(err);
 
-  // Remove Error's `stack` property. We don't want
-  // users to see this at the production env
-  if (process.env.NODE_ENV !== 'development') {
-    // Deliberately ignoring pure progrmaming here. We're the last middleware in the chain.
-    delete err.stack;
-  }
+  // // Remove Error's `stack` property. We don't want
+  // // users to see this at the production env
+  // if (process.env.NODE_ENV !== 'development') {
+  //   // Deliberately ignoring pure progrmaming here. We're the last middleware in the chain.
+  //   // NOTE: we're the last function here, so just delete the error stack.
+  //   // delete err.stack; // eslint-disable-line
+  // }
 
   // Finaly respond to the request */
   res.status(err.statusCode || 500).json(err);

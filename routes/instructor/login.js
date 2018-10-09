@@ -1,8 +1,8 @@
 const express = require('express');
+const createError = require('http-errors');
 const logger = require('../../config');
 const db = require('../../models');
 const sessionChecker = require('../sessionChecker');
-const { NotFound, Conflict } = require('../errors');
 
 const router = express.Router();
 
@@ -17,10 +17,10 @@ router.post('/', async (req, res, next) => {
   // Try to authenticate information.
   const instructor = await db.instructor.findOne({ where: { username } }).catch(logger.warn);
 
-  if (instructor === null) return next(new NotFound());
+  if (instructor === null) return next(new createError.NotFound());
 
   if (!await db.instructor.validPassword(password, instructor.password)) {
-    return next(new Conflict());
+    return next(new createError.Conflict());
   }
 
   req.session.instructor = instructor.dataValues;

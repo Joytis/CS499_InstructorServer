@@ -1,11 +1,11 @@
+const createError = require('http-errors');
 const { logger } = require('../../config');
-const { ErrUnknown, NotFound } = require('../errors');
 
 module.exports = async (res, next, args) => {
   const { model, where } = args;
   const value = await model.findOne({ where }).catch(logger.warn);
 
-  if (value === null) return next(new NotFound());
+  if (value === null) return next(new createError.NotFound());
 
   try {
     // Destroy value from database.
@@ -18,6 +18,6 @@ module.exports = async (res, next, args) => {
       message: 'Value deleted',
     });
   } catch (err) {
-    return next(new ErrUnknown());
+    return next(new createError.InternalServerError());
   }
 };

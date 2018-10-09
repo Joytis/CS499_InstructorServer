@@ -1,12 +1,18 @@
-const { Unauthorized, ErrUnknown } = require('./errors');
+const createError = require('http-errors');
+const { logger } = require('../config');
 
 module.exports = (req, res, next) => {
-  // Check for no session information.
-  if (req.session === undefined) return next(new Unauthorized());
+  // Check for no login information.
+  if (req.session === undefined || req.cookies.instructor_sid === undefined) {
+    logger.warn('Could not find session information..');
+    return next(new createError.Unauthorized('No session information found. Please log in.'));
+  }
 
-  // user is logged on. Let them pass.
-  if (req.session.instructor && req.cookies.instructor_sid) return next();
+  if (req.session.instructor && req.cookies.instructor_sid) {
+    return next();
+  }
 
   // Don't know what happened, but it's definitely not authorized.
-  return next(new ErrUnknown());
+  logger.error('Should not be accessible code');
+  return next(new createError.InternalServerError('Internal error when checking for session'));
 };
