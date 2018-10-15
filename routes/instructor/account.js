@@ -31,6 +31,7 @@ router.put('/', sessionChecker, async (req, res, next) => query.updateOneEntry(r
 router.delete('/', sessionChecker, async (req, res, next) => query.deleteOneEntry(res, next, {
   model: db.instructor,
   where: { id: req.session.instructor.id },
+  then: () => { res.clearCookie('instructor_sid'); },
 }));
 
 module.exports = router;

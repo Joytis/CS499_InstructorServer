@@ -11,8 +11,12 @@ module.exports = async (res, next, args) => {
     // Destroy value from database.
     await value.destroy({ force: true });
 
-    // Remove cookie. We shouldn't be logged in anymore.
-    res.clearCookie('instructor_sid');
+    // If a callback exists, and we've finished our update, do it.
+    try {
+      if (args.then !== undefined) await args.then(value);
+    } catch (err) {
+      return next(new createError.InternalServerError('UpdateOne then callback rejected'));
+    }
 
     return res.status(200).json({
       message: 'Value deleted',
