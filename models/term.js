@@ -4,11 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     startDate: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
     endDate: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
-    title: { type: DataTypes.STRING, defaultValue: 'Term: ' },
+    title: { type: DataTypes.STRING, allowNull: false, unique: true },
   });
 
   term.associate = (db) => {
-    term.hasMany(db.course);
+    term.hasMany(db.section);
   };
 
   return term;

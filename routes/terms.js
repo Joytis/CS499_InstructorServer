@@ -1,26 +1,21 @@
 const express = require('express');
-const { logger } = require('../config');
 const sessionChecker = require('./sessionChecker');
 const db = require('../models');
 const query = require('./query');
 
 const router = express.Router();
 
-router.get('/', sessionChecker, async (req, res) => {
-  const results = await db.term.findAll().catch(logger.warn);
-  return res.status(200).json({
-    data: results,
-  });
-});
+router.get('/', sessionChecker, async (req, res, next) => query.findAllEntries(res, next, {
+  model: db.term,
+}));
 
 router.get('/:id', sessionChecker, async (req, res, next) => query.findOneEntry(res, next, {
   model: db.term,
-  where: { title: req.params.id },
+  where: { id: req.params.id },
 }));
 
 router.post('/', sessionChecker, async (req, res, next) => query.createOneEntry(res, next, {
   model: db.term,
-  where: { title: req.body.title },
   values: req.body,
 }));
 
