@@ -1,12 +1,12 @@
 const express = require('express');
 const db = require('../../models');
-const sessionChecker = require('../sessionChecker');
+const { authentication } = require('../decorators');
 const query = require('../query');
 
 const router = express.Router();
 
 // Get account information from the currently logged on user.
-router.get('/', sessionChecker, async (req, res, next) => query.findOneEntry(res, next, {
+router.get('/', authentication.sessionChecker, async (req, res, next) => query.findOneEntry(res, next, {
   model: db.instructor,
   where: { id: req.session.instructor.id },
 }));
@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => query.createOneEntry(res, next, {
 }));
 
 // Update function for users.
-router.put('/', sessionChecker, async (req, res, next) => query.updateOneEntry(res, next, {
+router.put('/', authentication.sessionChecker, async (req, res, next) => query.updateOneEntry(res, next, {
   model: db.instructor,
   where: { id: req.session.instructor.id },
   values: req.body.data,
@@ -28,7 +28,7 @@ router.put('/', sessionChecker, async (req, res, next) => query.updateOneEntry(r
 
 
 // Delete the currently
-router.delete('/', sessionChecker, async (req, res, next) => query.deleteOneEntry(res, next, {
+router.delete('/', authentication.sessionChecker, async (req, res, next) => query.deleteOneEntry(res, next, {
   model: db.instructor,
   where: { id: req.session.instructor.id },
   then: () => { res.clearCookie('instructor_sid'); },

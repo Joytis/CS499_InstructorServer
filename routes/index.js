@@ -2,9 +2,13 @@ const express = require('express');
 
 const router = express.Router();
 
-/* GET home page. */
-router.get('/', (req, res) => {
-  res.render('index', { title: 'Express' });
-});
+router.use('/instructor', require('./instructor'));
+router.use('/terms', require('./terms'));
+router.use('/courses', require('./courses'));
+router.use('/students', require('./students'));
+router.use('/sections', require('./sections'));
+router.use('/grades', require('./grades'));
+router.use('/assignments', require('./assignments'));
+router.use('/assignmentCategories', require('./assignmentCategories'));
 
 module.exports = router;

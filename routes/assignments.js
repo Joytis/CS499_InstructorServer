@@ -4,6 +4,6 @@ const decorators = require('./decorators');
 
 const router = express.Router();
 decorators.authentication.decorate(router);
-decorators.simpleCrud.decorate(router, db.grade);
+decorators.simpleCrud.decorate(router, db.assignment);
 
 module.exports = router;

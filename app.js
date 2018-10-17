@@ -62,11 +62,6 @@ app.use((req, res, next) => {
 
 // Add routes to app.
 app.use('/', require('./routes/index'));
-app.use('/instructor', require('./routes/instructor'));
-app.use('/terms', require('./routes/terms'));
-app.use('/courses', require('./routes/courses'));
-app.use('/students', require('./routes/students'));
-app.use('/sections', require('./routes/sections'));
 
 // Error handling middleware.
 // NOTE: we NEED next for this error handler.

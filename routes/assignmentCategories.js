@@ -1,10 +1,9 @@
 const express = require('express');
+const db = require('../models');
+const decorators = require('./decorators');
 
 const router = express.Router();
-
-/* GET users listing. */
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
-});
+decorators.authentication.decorate(router);
+decorators.simpleCrud.decorate(router, db.assignmentCategory);
 
 module.exports = router;

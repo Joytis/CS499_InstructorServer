@@ -2,12 +2,12 @@ const express = require('express');
 const createError = require('http-errors');
 const logger = require('../../config');
 const db = require('../../models');
-const sessionChecker = require('../sessionChecker');
+const { authentication } = require('../decorators');
 
 const router = express.Router();
 
 /* GET if session is active. */
-router.get('/', sessionChecker, (req, res) => res.status(200).json({}));
+router.get('/', authentication.sessionChecker, (req, res) => res.status(200).json({}));
 
 /* POST create a new user session. */
 router.post('/', async (req, res, next) => {

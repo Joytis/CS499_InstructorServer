@@ -1,7 +1,7 @@
 const createError = require('http-errors');
-const { logger } = require('../config');
+const { logger } = require('../../config');
 
-module.exports = (req, res, next) => {
+function sessionChecker(req, res, next) {
   // Check for no login information.
   if (req.session === undefined || req.cookies.instructor_sid === undefined) {
     logger.warn('Could not find session information..');
@@ -15,4 +15,9 @@ module.exports = (req, res, next) => {
   // Don't know what happened, but it's definitely not authorized.
   logger.error('Should not be accessible code');
   return next(new createError.InternalServerError('Internal error when checking for session'));
+}
+
+module.exports.sessionChecker = sessionChecker;
+module.exports.decorate = (router) => {
+  router.use(sessionChecker);
 };
