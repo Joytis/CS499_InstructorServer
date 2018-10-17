@@ -68,10 +68,10 @@ module.exports.deleteOneEntry = async (res, next, args) => {
 };
 
 module.exports.findOneEntry = async (res, next, args) => {
-  const { model, identifier } = args;
+  const { model, where } = args;
 
   // Try to find user.
-  const data = await model.findOne({ where: identifier });
+  const data = await model.findOne({ where });
   if (data === null) return next(notFoundError);
 
   return res.status(200).json({
