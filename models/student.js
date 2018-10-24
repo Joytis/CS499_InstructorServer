@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 
   student.associate = (db) => {
     student.hasMany(db.grade);
-    student.belongsToMany(db.section, { through: 'StudentSection' });
+    student.belongsToMany(db.section, { through: 'studentSection' });
   };
 
   // Force a sync

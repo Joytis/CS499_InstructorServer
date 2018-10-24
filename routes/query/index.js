@@ -2,6 +2,7 @@ const createError = require('http-errors');
 const { logger, errorConversion } = require('../../config');
 
 const notFoundError = new createError.NotFound('Could not find entry');
+const internalServerError = new createError.InternalServerError('Something wonky happened in the server');
 
 function logAndConvert(error) {
   logger.warn(error.name);
@@ -79,6 +80,37 @@ module.exports.findOneEntry = async (res, next, args) => {
     data: data.dataValues,
   });
 };
+
+module.exports.findOneThenQuery = async (res, next, args) => {
+  try {
+    const { model, where, expectedMethod } = args;
+
+    const entry = await model.findOne({ where });
+    if (entry === null) return next(notFoundError);
+    if (entry[expectedMethod] === undefined) return next(internalServerError);
+
+    const data = await entry[expectedMethod]();
+    return res.status(200).json({ message: 'Found requested data', data });
+  } catch (err) {
+    return logAndConvert(err);
+  }
+};
+
+module.exports.findOneThenAdd = async (res, next, args) => {
+  try {
+    const { model, where, expectedMethod } = args;
+
+    const entry = await model.findOne({ where });
+    if (entry === null) return next(notFoundError);
+    if (entry[expectedMethod] === undefined) return next(internalServerError);
+
+    const data = await entry[expectedMethod]();
+    return res.status(200).json({ message: 'Found requested data', data });
+  } catch (err) {
+    return logAndConvert(err);
+  }
+};
+
 
 module.exports.findAllEntries = async (res, next, args) => {
   const { model } = args;

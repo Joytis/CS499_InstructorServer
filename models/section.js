@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     section.belongsTo(db.instructor);
     section.belongsTo(db.course, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
     section.belongsTo(db.term, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-    section.belongsToMany(db.student, { through: 'StudentSection' });
+    section.belongsToMany(db.student, { through: 'studentSection' });
     section.hasMany(db.assignmentCategory);
   };
 
