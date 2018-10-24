@@ -10,5 +10,6 @@ router.use('/sections', require('./sections'));
 router.use('/grades', require('./grades'));
 router.use('/assignments', require('./assignments'));
 router.use('/assignmentCategories', require('./assignmentCategories'));
+router.use('/enrollment', require('./enrollment'));
 
 module.exports = router;
