@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
     firstName: { type: DataTypes.STRING, allowNull: false },
     lastName: { type: DataTypes.STRING, allowNull: false },
     // Validate email with email regex
-    email: { type: DataTypes.STRING, validate: { isEmail: true }, allowNull: false, unique: true },
+    email: {
+      type: DataTypes.STRING,
+      validate: { isEmail: true },
+      allowNull: false,
+      unique: true,
+    },
     birthdate: DataTypes.DATE,
   }, {
     hooks: {

@@ -3,7 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const morgan = require('morgan');
+// const morgan = require('morgan');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const db = require('./models');
 const { logger } = require('./config');
@@ -17,10 +17,6 @@ db.sequelize.authenticate()
     await db.sequelize.sync().catch(err => logger.error('Unable to connnect: ', err));
   })
   .catch(err => logger.error('Unable to connect to database: ', err));
-
-
-// Initialize express to forward to winston with morgan.
-app.use(morgan('combined', { stream: logger.stream }));
 
 // initialize body-parser to parse incoming parameters requests to req.body
 app.use(bodyParser.json());

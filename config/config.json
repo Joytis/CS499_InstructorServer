@@ -7,10 +7,7 @@
       "dialect": "sqlite",
       "operatorsAliases": false,
       "host": "./database/development.db",
-      "storage": "./database/development.db",
-      "sync": {
-        "force": true
-      }
+      "storage": "./database/development.db"
     }
   },
   "test": {

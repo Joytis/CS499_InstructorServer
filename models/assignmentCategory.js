@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 
   assignmentCategory.associate = (db) => {
     assignmentCategory.belongsTo(db.section, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-    assignmentCategory.hasMany(db.assignment);
+    assignmentCategory.hasMany(db.assignment, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
   };
 
   return assignmentCategory;

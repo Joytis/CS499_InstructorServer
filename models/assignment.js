@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
   assignment.associate = (db) => {
     assignment.belongsTo(db.assignmentCategory, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
-    assignment.hasMany(db.grade);
+    assignment.hasMany(db.grade, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
   };
 
   return assignment;

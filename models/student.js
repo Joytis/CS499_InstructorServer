@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   student.associate = (db) => {
-    student.hasMany(db.grade);
+    student.hasMany(db.grade, { foreignKey: { allowNull: false }, onDelete: 'CASCADE' });
     student.belongsToMany(db.section, { through: 'studentSection' });
   };
 
