@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => query.createOneEntry(res, next, {
 }));
 
 // Update function for users.
-router.put('/', authentication.sessionChecker, async (req, res, next) => query.updateOneEntry(res, next, {
+router.put('/:id', authentication.sessionChecker, async (req, res, next) => query.updateOneEntry(res, next, {
   model: db.instructor,
   where: { id: req.session.instructor.id },
   values: req.body.data,

@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
       beforeCreate: async (instr) => {
         instr.password = await bcrypt.hash(instr.password, 6);
       },
+      beforeUpdate: async (instr) => {
+        instr.password = await bcrypt.hash(instr.password, 6);
+      },
     },
   });
 
