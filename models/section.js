@@ -3,6 +3,10 @@ module.exports = (sequelize, DataTypes) => {
     // Data values
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     sectionNumber: { type: DataTypes.INTEGER, allowNull: false },
+    gradeScaleA: { type: DataTypes.INTEGER, allowNull: false },
+    gradeScaleB: { type: DataTypes.INTEGER, allowNull: false },
+    gradeScaleC: { type: DataTypes.INTEGER, allowNull: false },
+    gradeScaleD: { type: DataTypes.INTEGER, allowNull: false },
   });
 
   section.associate = (db) => {

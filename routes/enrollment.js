@@ -42,11 +42,8 @@ router.delete('/', async (req, res, next) => {
     if (studentId === undefined) return next(badRequest);
     if (sectionId === undefined) return next(badRequest);
     const student = await db.student.findOne({ where: { id: studentId } });
-    logger.error(JSON.stringify(student, null, 2));
     const sections = await student.getSections();
-    logger.error(JSON.stringify(sections, null, 2));
-    const section = sections.find(element => element.id === studentId);
-    logger.error(JSON.stringify(section, null, 2));
+    const section = sections.find(element => element.id === sectionId);
     if (section === undefined) return next(createError.NotFound('Could not find the student enrollment info'));
 
     student.removeSection(section);
