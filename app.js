@@ -11,7 +11,8 @@ const { logger } = require('./config');
 const app = express();
 
 // Attempt to authenticate database before adding routes to app.
-db.sequelize.authenticate()
+db.sequelize
+  .authenticate()
   .then(async () => {
     logger.info('Connection has been established. Attempting sync');
     await db.sequelize.sync().catch(err => logger.error('Unable to connnect: ', err));
@@ -25,18 +26,17 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // initialize express-session to allow us track the logged-in user across sessions.
-app.use(session({
-  key: 'instructor_sid',
-  secret: 'CHANGEME',
-  resave: false,
-  saveUninitialized: false,
-  store: new SequelizeStore({
-    db: db.sequelize,
+app.use(
+  session({
+    key: 'instructor_sid',
+    secret: 'CHANGEME',
+    resave: false,
+    saveUninitialized: false,
+    store: new SequelizeStore({
+      db: db.sequelize,
+    }),
   }),
-  cookie: {
-    expires: 600000,
-  },
-}));
+);
 
 app.use(express.json());
 
@@ -61,7 +61,8 @@ app.use('/', require('./routes/index'));
 
 // Error handling middleware.
 // NOTE: we NEED next for this error handler.
-app.use((err, req, res, next) => { // eslint-disable-line
+app.use((err, req, res, next) => {
+  // eslint-disable-line
   logger.error(err);
 
   // // Remove Error's `stack` property. We don't want
